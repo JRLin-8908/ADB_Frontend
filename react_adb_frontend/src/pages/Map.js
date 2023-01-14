@@ -1,4 +1,5 @@
-import React from "react";
+//import React from "react";
+import React from 'react';
 import { useMemo } from "react";
 // import { GoogleMap, useLoadScript, Marker } from "@react-google-maps/api";
 
@@ -7,15 +8,34 @@ import { useEffect, useState } from "react";
 import Showmap from "../components/Showmap";
 
 const Map = () => {
-  const queryparam = {
-    startdate: "2011-12-25",
-    enddate: "2011-12-26",
+  const [queryparam, setQueryparam] = useState({
+    festival: "xmas",
     item: "orders",
     district: "台北市",
-  };
+  });
+
+  const [queryresult, setQueryresult] = useState([
+    { lat: 25.033, lng: 121.5654 },
+    { lat: 25.043, lng: 121.57 },
+    { lat: 25.032, lng: 121.56 },
+  ]);
+
+  useEffect(() => {
+    setQueryresult((oldArray) => [...oldArray]);
+    const requestOptions = {
+      method: "POST",
+      headers: { "Content-Type": "json" },
+      body: JSON.stringify({ queryparam }),
+    };
+    console.log(requestOptions);
+    // fetch('https://reqres.in/api/posts', requestOptions)
+    // .then(response => response.json())
+    // .then(data => setQueryresult(data.id));
+  }, [queryparam]);
 
   const handleSave = (values) => {
-    console.log(values);
+    // console.log(values);
+    setQueryparam(values);
   };
 
   return (
@@ -25,7 +45,7 @@ const Map = () => {
       </div>
 
       <div className="flexbox map">
-        <Showmap />
+        <Showmap results={queryresult} />
       </div>
     </>
   );
